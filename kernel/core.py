@@ -138,9 +138,15 @@ def help_cmd(): # help list
     print("help ---> this command, list of commands.")
     print("chost ---> change hostname.")
     print("echo ---> displays text on the screen, echo hello, world!")
-    print("pwd ---> displays where you are.")
+    print("pwd, whereami ---> displays where you are.")
+    print("whoami ---> displays current user.")
     print("version ---> displays the system version.")
     print("ls ---> list of files or dirs in dir, where is an user.")
+    print("cd ---> change directory.")
+    print("date ---> displays current date.")
+    print("time ---> displays current time.")
+
+    print("startde ---> start DE (de is not completed)")
     print("="*10 + "APPS" + "="*10 )
     print("slowfetch ---> fastfetch analog.")
 

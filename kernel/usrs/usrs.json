@@ -3,15 +3,5 @@
         "username": "livecd",
         "password": "livecd",
         "isroot": true
-    },
-    {
-        "username": "test",
-        "password": "test",
-        "isroot": true
-    },
-    {
-        "username": "root",
-        "password": "root",
-        "isroot": true
     }
 ]

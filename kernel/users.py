@@ -35,7 +35,7 @@ class User:
             print(f"Welcome, {self.username}!")
             global usr_now
             usr_now = self.username
-            print("Type <help> for list of commands.")
+            print("\nType <help> for list of commands.\n")
             return True
         else:
             print("Login error: incorrect password")
@@ -47,10 +47,10 @@ class User:
         users_dir = Path("./usrs")
         users_file = users_dir / "usrs.json"
         users = self._load_users(users_file)
-
+        
         if any(u["username"] == self.username for u in users):
             print("Registration error: there is an user with this name.")
-            return
+            return False
 
         users.append({
             "username": self.username,

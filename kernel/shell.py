@@ -109,8 +109,6 @@ while True:
         color_usr = f"{Colors.GREEN}{usr_now}{Colors.END}"   #разукрашиваем юзернейм и хостнейм
         color_host = f"{Colors.BLUE}{hostname}{Colors.END}"
         cmd = input(f"{color_usr}@{color_host}: ")
-        if cmd == "shut": #FOR DEBUG: fast shutdown
-            exit()
         kernel.check_cmd(cmd.lower()) #проверяем и выполняем команду
         update()
     except KeyboardInterrupt as ki:

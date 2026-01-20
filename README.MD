@@ -26,7 +26,7 @@ A step-by-step guide to launching the "system"
     ```bash
     cd kernel
     ```
-4. Run core.py:
+4. Run shell.py:
    ```bash
    python shell.py
    ```   

@@ -17,7 +17,7 @@ A step-by-step guide to launching the "system"
     ```bash
     git clone https://github.com/LozkaDani/QuickPyre.git
     ```
-2. Cd to project's path:
+2. Cd to project's dir:
    ```bash
    cd QuickPyre
    ```

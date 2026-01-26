@@ -1,7 +1,7 @@
 ## Hello!
 Hello! My name is Danila, and i am a creator of this very bad pseudo python os.
 
-# Release 2.0!
+# Release 2.1!
 
 ### Prerequisites
 
@@ -37,3 +37,4 @@ A step-by-step guide to launching the "system"
 <html><img src="screenshots/console_1.jpg"/></html>
 <html><img src="screenshots/console_2.jpg"/></html>
 <html><img src="screenshots/console_3.jpg"/></html>
+<html><imt src="screenshots/console_2.1.png/></html>

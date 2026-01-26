@@ -5,11 +5,9 @@ from pathlib import Path
 import sys
 from datetime import date
 import datetime
-import asyncio
 import subprocess
 from utils import write_file
-#import rglob
-
+from commands import echo, clear, chost, cd, cat, help, time, date, shutdown, ls, calendar, pwd, whoami, version
 # Add the path to the directory where the apps folder is located.
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
@@ -23,12 +21,11 @@ class Kernel:
         self.core_path = os.path.dirname(os.path.abspath(__file__))
         self.version = self._load_version(self.core_path)
         self.hostname = self._load_hostname()
-        self.kernel_vers = "QuickKernel v. 0.5.7"
+        self.kernel_vers = "QuickKernel v. 1.4.0"
         self.usr_now = None
 
     def _load_hostname(self):
         cur_dir = Path.cwd()
-        #full_path = os.path.join(cur_dir, "../config/hostname.quick")
         while cur_dir:
             for file in cur_dir.rglob("config/hostname.quick"):
                 if file.exists():
@@ -46,15 +43,15 @@ class Kernel:
                 
 
     
-    def _load_version(self, corep):
-        configs_path = os.path.join(corep, "../config/version.quick")
+    def _load_version(self, core_path):
+        configs_path = os.path.join(core_path, "../config/version.quick")
         with open(configs_path, "r") as f:
             version = f.readline().strip()
         return version
     
-    def check_cmd(self, input):
-        # Spliting command on command and args
-        parts = input.split()
+    def check_cmd(self, user_input):
+        #spliting command on command and args
+        parts = user_input.split()
         if not parts:
             return
 
@@ -62,183 +59,43 @@ class Kernel:
         args = parts[1:] if len(parts) > 1 else []
 
         if cmd == "shutdown":
-            self.shutdown_cmd()
-        elif cmd == "startde":
-            asyncio.run(self.startde())
+            shutdown.shutdown_cmd()
         elif cmd == "help":
-            self.help_cmd()
+            help.help_cmd()
         elif cmd == "chost":
-            self.chost_cmd()
-        elif cmd == "dsserv":
-            print("https://discord.gg/N53NPRrkXU --- Yumalaya")
+            chost.chost_cmd(self.hostname, args)
+            self.hostname = self._load_hostname()
         elif cmd == "slowfetch":
             fetch = slowfetch.slowfetch_class()
-        elif cmd == "muskat":
+        elif cmd == "muskat": #пасхалочк
             print("Also try MuskatOS!")
         elif cmd == "echo":
-            self.echo_cmd(args)
+            echo.echo_cmd(args)
         elif cmd == "whoami":
-            print(self.usr_now)
+            whoami.whoami(self.usr_now)
         elif cmd == "pwd" or cmd == "whereami":
-            _, cur_dir = str(os.getcwd()).split("QuickPyre", 1)
-            if cur_dir == "":
-                print("You are at: /")
-            else:
-                print(f"You are at: {cur_dir}")
-            #print(f"You are at: {os.getcwd()}")
+            pwd.pwd()
         elif cmd == "version":
-            print(self.version)
+            version.version(self.version)
         elif cmd == "ls":
-            self.ls_cmd()
+            ls.ls_cmd()
         elif cmd == "cd":
-            self.cd_cmd(args)
+            cd.cd_cmd(args)
         elif cmd == "date":
-            print(str(date.today())+" yy/mm/dd format")
+            date.date_cmd()
         elif cmd == "time":
-            current_date_time = datetime.datetime.now()
-            current_time = datetime.datetime.now().time()
-            print(current_time)
+            time.time_cmd()
         elif cmd == "clear":
-            if os.name == "nt": #Windows
-                print(" "*100)
-            elif os.name == "posix": #Unix-like systems
-                os.system("clear")
+            clear.clear_cmd()
         elif cmd == "cat":
             if len(parts) < 2:
                 print("cat: missing operand")
                 return
-            self.cat_cmd(parts)
+            cat.cat_cmd(parts)
+        elif cmd == "calendar":
+            calendar.calendar_cmd()
         else:
             print(f"{cmd}: command not found.")
-        
-    def cat_cmd(self, parts):
-        filename = " ".join(parts[1:])
-        filepath = Path(filename)
-
-        if not filepath.exists():
-            print(f"cat: {filename}: No such file or directory")
-            return
-
-        if filepath.is_dir():
-            print(f"cat: {filename}: Is a directory")
-            return
-        
-        try:
-            with open(filepath, "r") as f:
-                content = f.read()
-                print(content)
-        except Exception as e:
-            print(f"cat: error reading file: {e}")
-
-    async def startde(self):
-        current_dir = Path.cwd()
-    
-        #ищем файл, поднимаясь вверх по директориям
-        while current_dir:
-            #ищем в папке и подпапках где щас программа de/quickwindow.py
-
-            for file in current_dir.rglob("de/quickwindow.py"):
-                if file.exists():
-                    #файл найден -- запускаем
-                    if os.name == "nt":
-                        subprocess.Popen(["python", str(file)])
-                    else:
-                        subprocess.Popen(["python", str(file)], start_new_session=True)
-                    return
-            
-            #если папка щас это папка проекта, а de не найден: 
-            if current_dir.name == "QuickPyre":
-                break
-            
-            
-            if current_dir.parent == current_dir:  #если программа уже в корне: выводим что файла нет.
-                break
-            
-            current_dir = current_dir.parent #идем на папку выше
-        
-        print("startde: failed to find QuickWindow")
-
-    def chost_cmd(self):
-        new_hostname = input("New hostname: ")
-        current_dir = Path.cwd()
-        if self.hostname == new_hostname:
-            print("New hostname can't be the same as current.")
-            return
-        while current_dir:
-            self.hostname = new_hostname.strip()
-            for file in current_dir.rglob("config/hostname.quick"):
-                if file.exists():
-                    write_to_f = write_file.write()
-                    write_to_f.write_to_file(os.path.abspath(file), self.hostname)
-                    return
-                
-            if current_dir.name == "QuickPyre":
-                break
-            if current_dir.parent == current_dir:
-                break
-            current_dir = current_dir.parent
-        self.hostname = self._load_hostname()
-
-    def update(self): # update the invitation, system, etc. after executing the command
-        hostname_load()
-
-
-
-    def help_cmd(self): # help list
-        print("="*10 + "BASE CMDS" + "="*10)
-        print("shutdown ---> off system.")
-        print("help ---> this command, list of commands.")
-        print("chost ---> change hostname.")
-        print("echo ---> displays text on the screen, echo hello, world!")
-        print("pwd, whereami ---> displays where you are.")
-        print("whoami ---> displays current user.")
-        print("version ---> displays the system version.")
-        print("ls ---> list of files or dirs in dir, where is an user.")
-        print("cd ---> change directory.")
-        print("date ---> displays current date.")
-        print("time ---> displays current time.")
-        print("clear ---> clears terminal.")
-        print("cat ---> displays text from file.")
-
-        print("startde ---> start DE (de is not completed)")
-        print("="*10 + "APPS" + "="*10 )
-        print("slowfetch ---> fastfetch analog.")
-
-    def shutdown_cmd(self):
-        print("Checking errors...")
-        time.sleep(1)
-        print("Turning off system parts...")
-        time.sleep(2)
-        print("Shutdowning system...")
-        time.sleep(3)
-        exit()
-
-
-    def cd_cmd(self, args):
-        _, cur_dir = str(os.getcwd()).split("QuickPyre", 1)
-        try:
-            if not args:
-                print("cd: missing operand")
-            else:
-                dir_name = args[0]
-                if dir_name == "..":
-                    if cur_dir != "":
-                        os.chdir("..")
-                    else:
-                        print("No changes.")
-                else:
-                    os.chdir(dir_name)
-        except Exception as e:
-            print(f"cd: {e}")
-    def ls_cmd(self): 
-        current_dir = Path(".")
-        items = list(current_dir.iterdir()) #list of items in dir
-        for item in items:
-            print(item)
-
-    def echo_cmd(self, args):
-        print(" ".join(args))
-
         
 
 

@@ -14,7 +14,7 @@ kernel = Kernel()
 
 usr_now = kernel.usr_now
 hostname = kernel.hostname
-shell_vers = "KvalxaShell v. 1.0.5"
+shell_vers = "KvalxaShell v. 1.2.4"
 kernel.shell = shell_vers
 
 def on_start():
@@ -109,6 +109,8 @@ while True:
         color_usr = f"{Colors.GREEN}{usr_now}{Colors.END}"   #разукрашиваем юзернейм и хостнейм
         color_host = f"{Colors.BLUE}{hostname}{Colors.END}"
         cmd = input(f"{color_usr}@{color_host}: ")
+        if cmd == "shut": #FOR DEBUG: fast shutdown
+            exit()
         kernel.check_cmd(cmd.lower()) #проверяем и выполняем команду
         update()
     except KeyboardInterrupt as ki:

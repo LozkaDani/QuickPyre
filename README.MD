@@ -37,4 +37,4 @@ A step-by-step guide to launching the "system"
 <html><img src="screenshots/console_1.jpg"/></html>
 <html><img src="screenshots/console_2.jpg"/></html>
 <html><img src="screenshots/console_3.jpg"/></html>
-<html><img src="screenshots/console_2.1.png/></html>
+<html><img src="screenshots/console_2.1.png"/></html>

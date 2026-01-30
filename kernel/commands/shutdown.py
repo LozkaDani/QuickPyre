@@ -1,3 +1,4 @@
+import time
 def shutdown_cmd():
     print("Checking errors...")
     time.sleep(1)

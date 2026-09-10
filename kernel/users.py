@@ -13,7 +13,7 @@ class User:
 
         if not users_file.exists():
             print("ERROR: NO usrs.json FILE.")
-            print(users_file)
+            #print(users_file)
             return False
         users = self._load_users(users_file)
 

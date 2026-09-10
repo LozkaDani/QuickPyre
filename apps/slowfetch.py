@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 import subprocess
+
 class Colors:
     BLACK = "\033[0;30m"
     RED = "\033[0;31m"
@@ -32,7 +33,7 @@ class slowfetch_class:
         self.slowfetch_out()
     
     def check_config_path(self):
-        base_text = "OS_NAME=QuickPyre\nVERSION=Release 2.2"
+        base_text = "OS_NAME=QuickPyre\nVERSION=Release 3.0"
 
         current_dir = Path.cwd()
     
@@ -54,7 +55,7 @@ class slowfetch_class:
                 break
             
             current_dir = current_dir.parent #идем на папку выше
-        if not cfg_path.exists():
+        if not self.cfg_path.exists():
             try:
                 with open(cfg_path, "w") as f:
                     f.write(base_text)
@@ -67,7 +68,7 @@ class slowfetch_class:
                 hrs = int(uptime // 3600)
                 mins = int((uptime % 3600) // 60)
                 return f"{hrs}h {mins}m"
-        except:
+        except PermissionError as e:
             return "Unknown"
     
     def parse_config(self, file_path):
@@ -76,7 +77,8 @@ class slowfetch_class:
         full_path = os.path.join(current_dir, file_path)
         if not os.path.exists(full_path):
             print("ERROR: NO slowfetch.cfg FILE")
-            #print("DOWNLOAD IT WITH: unbound -S slowfetch.cfg")
+            return
+            #print("DOWNLOAD IT WITH: quick -S slowfetch.cfg")
 
         with open(full_path, 'r', encoding='utf-8') as f:
             for line in f:
@@ -94,7 +96,7 @@ class slowfetch_class:
 
 
     def slowfetch_out(self):
-        global config
+        self.config
         self.OS_NAME = self.config.get('OS_NAME')
         self.VERSION = self.config.get('VERSION')
         print(f"           . ..:.")
@@ -119,3 +121,6 @@ class slowfetch_class:
         print(f"        =**@@       @@@..")
         print(f"         .:-*@@@@@@%-")
         print(f"             =:....=")
+
+
+fetch = slowfetch_class()
